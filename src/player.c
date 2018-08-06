@@ -20,7 +20,7 @@ void playerStats(playerStruct *player) {
     if (player == NULL)
         return;
 
-    printf("name: %s\n", player->name);
+    printf("name: %s", player->name);
     printf("health: %d\n", player->health);
     printf("mana: %d\n", player->mana);
 

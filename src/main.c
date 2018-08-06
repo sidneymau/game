@@ -10,7 +10,6 @@ int main() {
     printf("> ");
     char name[16];
     fgets(name, 16, stdin);
-    printf("\n");
 
     playerStruct *player = create_player(name);
     playerStats(player);
