@@ -9,6 +9,6 @@ typedef struct {
 
 playerStruct *create_player(char *name);
 
-void playerStats(playerStruct *player);
+void player_stats(playerStruct *player);
 
 #endif

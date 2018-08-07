@@ -1,2 +1,2 @@
-main: player.c player.h main.c
-	clang -Wall -o main player.c main.c
+main: player.c player.h screen.c screen.h main.c
+	clang -lmenu -lncurses -Wall -o main player.c screen.c main.c

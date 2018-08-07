@@ -3,7 +3,8 @@
 #include <string.h>
 #include "player.h"
 
-playerStruct *create_player(char *name) {
+playerStruct *create_player(char *name)
+{
     if (name == NULL)
         return NULL;
 
@@ -16,7 +17,8 @@ playerStruct *create_player(char *name) {
     return player;
 }
 
-void playerStats(playerStruct *player) {
+void player_stats(playerStruct *player)
+{
     if (player == NULL)
         return;
 
