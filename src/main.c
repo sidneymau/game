@@ -37,17 +37,23 @@ int main()
 	int window_x = x_max / 2 - window_width / 2;
     int window_y = y_max / 2 - window_height / 2;
 
-    // Draw game panel
-    WINDOW *game_win = create_newwin(max_height - 4, max_width, window_y, window_x + 1);
-    draw_borders(game_win);
+    // Draw game window
+    WINDOW *game_border = create_newwin(max_height - 4, max_width, window_y, window_x + 1);
+    draw_borders(game_border);
+    WINDOW *game_win = create_newwin(max_height - 6, max_width - 2, window_y - 2, window_x + 3);
     PANEL *game_panel = new_panel(game_win);
     int game_x_min = 0, game_y_min = 0;
     int game_x_max, game_y_max;
     getmaxyx(game_win, game_y_max, game_x_max);
+    game_x_min+=3;
+    game_y_min+=3;
+    game_x_max-=3;
+    game_y_max-=3;
 
-    // Draw status panel
-    WINDOW *status_win = create_newwin(6, max_width, window_y + max_height - 4, window_x + 1);
-    draw_borders(status_win);
+    // Draw status window
+    WINDOW *status_border = create_newwin(6, max_width, window_y + max_height - 4, window_x + 1);
+    draw_borders(status_border);
+    WINDOW *status_win = create_newwin(4, max_width - 3, window_y + max_height - 3, window_x + 3);
     PANEL *status_panel = new_panel(status_win);
 
     // Update panels
@@ -57,20 +63,22 @@ int main()
     doupdate();
 
     // Game messages
-    //mvwprintw(game_win, 0, 0, "game");
+    mvwprintw(game_border, 0, 0, "Game");
+    wnoutrefresh(game_border);
     wnoutrefresh(game_win);
 
     // Status messages
-    mvwprintw(status_win, 0, 0, "Status");
-    mvwprintw(status_win, 1, 2, "You are ($).");
-    mvwprintw(status_win, 2, 2, "Press (m) for the menu (not yet implemented).");
-    mvwprintw(status_win, 3, 2, "Press (q) to exit.");
+    mvwprintw(status_border, 0, 0, "Status");
+    mvwprintw(status_win, 0, 0, "- You are ($).");
+    mvwprintw(status_win, 1, 0, "- Press (m) for the menu (not yet implemented).");
+    mvwprintw(status_win, 2, 0, "- Press (q) to exit.");
+    wnoutrefresh(status_border);
     wnoutrefresh(status_win);
 
     // Update
     doupdate();
 
-    int x = 0, y = 0;
+    int x = game_x_min, y = game_y_min;
     int ch = 0;
     int t = 0;
     while(1) {
@@ -84,7 +92,7 @@ int main()
         if (ch == 'q')
             break;
         else if (ch == KEY_RIGHT) {
-            if (x < game_x_max - 1)
+            if (x < game_x_max)
                 x++;
         }
         else if (ch == KEY_LEFT) {
@@ -96,7 +104,7 @@ int main()
                 y--;
         }
         else if (ch == KEY_DOWN) {
-            if (y < game_y_max - 1)
+            if (y < game_y_max)
                 y++;
         }
 
