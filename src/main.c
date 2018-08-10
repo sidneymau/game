@@ -7,6 +7,7 @@
 //#include <menu.h>
 #include "player.h"
 #include "screen.h"
+#include "map.h"
 
 int main()
 {
@@ -76,6 +77,7 @@ int main()
     int t = 0;
     while(1) {
         wclear(game_win);
+        print_dot(game_win);
         mvwprintw(game_win, y, x, "$");
         mvwprintw(status_win, 3, 0, "You are at x=%d, y=%d, t=%d.", x, y, t);
         update_panels();
