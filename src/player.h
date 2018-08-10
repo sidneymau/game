@@ -7,7 +7,7 @@ typedef struct {
     int mana;
 } playerStruct;
 
-playerStruct *create_player(char *name);
+playerStruct *init_player(char *name);
 
 void player_stats(playerStruct *player);
 

@@ -17,7 +17,7 @@ int main()
     //char name[16];
     //fgets(name, 16, stdin);
 
-    //playerStruct *player = create_player(name);
+    //playerStruct *player = init_player(name);
     //player_stats(player);
 
     // initialize ncurses screen
