@@ -3,7 +3,7 @@
 #include <string.h>
 #include "player.h"
 
-playerStruct *create_player(char *name)
+playerStruct *init_player(char *name)
 {
     if (name == NULL)
         return NULL;
