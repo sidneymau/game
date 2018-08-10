@@ -77,8 +77,12 @@ int main()
     int t = 0;
     while(1) {
         wclear(game_win);
-        print_dot(game_win);
+        wclear(status_win);
+        //print_dot(game_win);
         mvwprintw(game_win, y, x, "$");
+        mvwprintw(status_win, 0, 0, "- You are ($).");
+        mvwprintw(status_win, 1, 0, "- Press (m) for menu (not yet implemented).");
+        mvwprintw(status_win, 2, 0, "- Press (q) to exit.");
         mvwprintw(status_win, 3, 0, "You are at x=%d, y=%d, t=%d.", x, y, t);
         update_panels();
         doupdate();
