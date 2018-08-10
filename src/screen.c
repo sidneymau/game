@@ -7,15 +7,29 @@
 
 // Using ncurses to handle terminal IO
 
-void draw_screen(WINDOW *screen)
+void init_screen()
 {
-    int x, y, i;
-    getmaxyx(screen, y, x);
-
-    initscr(); // initialize curses library
-    keypad(stdscr, TRUE); // enable keyboard mapping
+    initscr(); // initialize curses
+    keypad(stdscr, TRUE);
     raw();
-    noecho(); // echo input
+    noecho();
+    curs_set(FALSE);
+}
 
-    return;
+WINDOW *create_newwin(int height, int width, int starty, int startx)
+{	WINDOW *local_win;
+
+	local_win = newwin(height, width, starty, startx);
+	//box(local_win, 0 , 0); /* 0, 0 gives default characters 
+	//						* for the vertical and horizontal
+	//						* lines	*/
+	//wrefresh(local_win);   /* Show that box */
+
+	return local_win;
+}
+
+void draw_borders(WINDOW *screen)
+{
+    box(screen, 0, 0);
+    wrefresh(screen);
 }
