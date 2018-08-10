@@ -11,15 +11,15 @@
 
 int main()
 {
-    //printf("Welcome to game.\n");
+    printf("Welcome to game.\n");
 
-    //printf("Name?\n");
-    //printf("> ");
-    //char name[16];
-    //fgets(name, 16, stdin);
+    printf("Name?\n");
+    printf("> ");
+    char name[16];
+    fgets(name, 16, stdin);
 
-    //playerStruct *player = init_player(name);
-    //player_stats(player);
+    playerStruct *player = init_player(name);
+    player_stats(player);
 
     // initialize ncurses screen
     init_screen();
@@ -79,6 +79,7 @@ int main()
         wclear(game_win);
         wclear(status_win);
         //print_dot(game_win);
+        //mvwprintw(game_win, y, x, "%s", player->name);
         mvwprintw(game_win, y, x, "$");
         mvwprintw(status_win, 0, 0, "- You are ($).");
         mvwprintw(status_win, 1, 0, "- Press (m) for menu (not yet implemented).");
@@ -91,19 +92,19 @@ int main()
         if (ch == 'q') {
             break;
         }
-        else if (ch == KEY_RIGHT) {
+        else if ((ch == KEY_RIGHT) || (ch == 'd')) {
             if (x < game_x_max)
                 x++;
         }
-        else if (ch == KEY_LEFT) {
+        else if ((ch == KEY_LEFT) || (ch == 'a')) {
             if (x > game_x_min)
                 x--;
         }
-        else if (ch == KEY_UP) {
+        else if ((ch == KEY_UP) || (ch == 'w')) {
             if (y > game_y_min)
                 y--;
         }
-        else if (ch == KEY_DOWN) {
+        else if ((ch == KEY_DOWN) || (ch == 's')) {
             if (y < game_y_max)
                 y++;
         }
