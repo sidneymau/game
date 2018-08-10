@@ -23,7 +23,7 @@ int main()
     // initialize ncurses screen
     init_screen();
     draw_borders(stdscr);
-    //mvprintw(0, 0, "screen");
+    mvprintw(0, 0, "Screen");
 
     // set up initial windows
     int x_min = 0, y_min = 0;
@@ -40,15 +40,15 @@ int main()
     // Draw game window
     WINDOW *game_border = create_newwin(max_height - 4, max_width, window_y, window_x + 1);
     draw_borders(game_border);
-    WINDOW *game_win = create_newwin(max_height - 6, max_width - 2, window_y - 2, window_x + 3);
+    WINDOW *game_win = create_newwin(max_height - 6, max_width - 4, window_y + 1, window_x + 3);
     PANEL *game_panel = new_panel(game_win);
     int game_x_min = 0, game_y_min = 0;
     int game_x_max, game_y_max;
     getmaxyx(game_win, game_y_max, game_x_max);
-    game_x_min+=3;
-    game_y_min+=3;
-    game_x_max-=3;
-    game_y_max-=3;
+    game_x_min+=0;
+    game_y_min+=0;
+    game_x_max-=1;
+    game_y_max-=1;
 
     // Draw status window
     WINDOW *status_border = create_newwin(6, max_width, window_y + max_height - 4, window_x + 1);
@@ -56,41 +56,35 @@ int main()
     WINDOW *status_win = create_newwin(4, max_width - 3, window_y + max_height - 3, window_x + 3);
     PANEL *status_panel = new_panel(status_win);
 
-    // Update panels
-    update_panels();
-
-    // Push to screen
-    doupdate();
-
     // Game messages
     mvwprintw(game_border, 0, 0, "Game");
-    wnoutrefresh(game_border);
-    wnoutrefresh(game_win);
 
     // Status messages
     mvwprintw(status_border, 0, 0, "Status");
     mvwprintw(status_win, 0, 0, "- You are ($).");
-    mvwprintw(status_win, 1, 0, "- Press (m) for the menu (not yet implemented).");
+    mvwprintw(status_win, 1, 0, "- Press (m) for menu (not yet implemented).");
     mvwprintw(status_win, 2, 0, "- Press (q) to exit.");
-    wnoutrefresh(status_border);
-    wnoutrefresh(status_win);
 
     // Update
+    wnoutrefresh(game_border);
+    wnoutrefresh(status_border);
+    update_panels();
     doupdate();
 
     int x = game_x_min, y = game_y_min;
     int ch = 0;
     int t = 0;
     while(1) {
-        wclear(game_win); // Clear the screen of all previously-printed characters
-        mvwprintw(game_win, y, x, "$"); // Print player at (x, y)
-        wnoutrefresh(game_win);
+        wclear(game_win);
+        mvwprintw(game_win, y, x, "$");
+        mvwprintw(status_win, 3, 0, "You are at x=%d, y=%d, t=%d.", x, y, t);
         update_panels();
         doupdate();
 
         ch = getch();
-        if (ch == 'q')
+        if (ch == 'q') {
             break;
+        }
         else if (ch == KEY_RIGHT) {
             if (x < game_x_max)
                 x++;
@@ -115,10 +109,12 @@ int main()
     delwin(game_win);
     del_panel(status_panel);
     delwin(status_win);
+    delwin(game_border);
+    delwin(status_border);
     clear();
     //mvprintw(0, 0, "Press any key to quit.\n");
     //getch();
-    endwin(); // return to normal terminal
+    endwin(); // end ncurses
 
     printf("Exiting game.\n");
 
