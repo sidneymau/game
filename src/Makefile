@@ -1,2 +1,2 @@
-main: player.c player.h screen.c screen.h map.c map.h main.c
-	clang -lmenu -lpanel -lncurses -Wall -o main player.c screen.c map.c main.c
+main: combat.c combat.h main.c player.c player.h screen.c screen.h utils.c utils.h
+	clang -lmenu -lpanel -lncurses -Wall -o main combat.c main.c player.c screen.c utils.c
