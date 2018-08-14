@@ -7,7 +7,7 @@
 //#include <menu.h>
 #include "player.h"
 #include "screen.h"
-#include "map.h"
+//#include "map.h"
 
 int main()
 {
@@ -18,7 +18,7 @@ int main()
     char name[16];
     fgets(name, 16, stdin);
 
-    playerStruct *player = init_player(name);
+    playerStruct *player = init_player(name, 100, 100, 100);
     player_stats(player);
 
     // initialize ncurses screen
@@ -27,7 +27,7 @@ int main()
     mvprintw(0, 0, "Screen");
 
     // set up initial windows
-    int x_min = 0, y_min = 0;
+    //int x_min = 0, y_min = 0;
     int x_max, y_max;
     getmaxyx(stdscr, y_max, x_max);
 

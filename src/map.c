@@ -7,8 +7,9 @@
 
 void print_dot(WINDOW *window)
 {
-    int x_min = 0, y_min = 0;
-    int x_max = 0, y_max = 0;
+    //int x_min = 0, y_min = 0;
+    //int x_max = 0, y_max = 0;
+    int x_max, y_max
     getmaxyx(window, y_max, x_max);
 
     char grid[x_max][y_max];
