@@ -83,8 +83,6 @@ int main()
     while(1) {
         wclear(game_win);
         wclear(status_win);
-        //print_dot(game_win);
-        //mvwprintw(game_win, y, x, "%s", player->name);
         mvwprintw(game_win, y, x, "$");
         mvwprintw(status_win, 0, 0, "- You are ($).");
         //mvwprintw(status_win, 1, 0, "- Press (m) for menu (not yet implemented).");
@@ -128,10 +126,11 @@ int main()
             doupdate();
             sleep(1);
             alive = combat(combatants);
-            if (alive > 0) {
+            if (alive == 1) {
                 mvwprintw(status_win, 3, 0, "You won against the %s.", enemy->name);
                 update_panels();
                 doupdate();
+                sleep(1);
             }
             else {
                 mvwprintw(status_win, 3, 0, "You lost to the %s.", enemy->name);
