@@ -31,10 +31,3 @@ void enemy_stats(enemyStruct *enemy)
 
     return;
 }
-
-enumyStruct *dragon = init_enemy("dragon", 100, 100, 100);
-
-enemyStruct *slime = init_enemy("slime", 50, 50, 0);
-
-enemyStruct *knight = init_enemy("knight", 75, 75, 0);
-

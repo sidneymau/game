@@ -82,12 +82,14 @@ void do_damage(combatantStruct *combatants)
     int e_armor = enemy_armor(combatants->enemy);
 
     int p_damage, e_damage;
-    p_damage = p_armor - e_attack;
-    if (p_damage > 0)
-        p_damage = 0;
-    e_damage = e_armor - p_attack;
-    if (e_damage > 0)
-        e_damage = 0;
+    p_damage = e_attack;
+    e_damage = p_attack;
+    //p_damage = p_armor - e_attack;
+    //if (p_damage > 0)
+    //    p_damage = 0;
+    //e_damage = e_armor - p_attack;
+    //if (e_damage > 0)
+    //    e_damage = 0;
 
     p_health -= p_damage;
     e_health -= e_damage;

@@ -12,10 +12,4 @@ enemyStruct *init_enemy(char *name, int vitality, int power, int mana);
 
 void enemy_stats(enemyStruct *enemy);
 
-extern enemyStruct *dragon;
-
-extern enemyStruct *slime;
-
-extern enemyStruct *knight;
-
 #endif

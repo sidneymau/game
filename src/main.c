@@ -5,7 +5,10 @@
 #include <curses.h>
 #include <panel.h>
 //#include <menu.h>
+#include "utils.h"
 #include "player.h"
+#include "enemy.h"
+#include "combat.h"
 #include "screen.h"
 //#include "map.h"
 
@@ -75,6 +78,8 @@ int main()
     int x = game_x_min, y = game_y_min;
     int ch = 0;
     int t = 0;
+    int dice = 0;
+    int alive = 1;
     while(1) {
         wclear(game_win);
         wclear(status_win);
@@ -82,9 +87,9 @@ int main()
         //mvwprintw(game_win, y, x, "%s", player->name);
         mvwprintw(game_win, y, x, "$");
         mvwprintw(status_win, 0, 0, "- You are ($).");
-        mvwprintw(status_win, 1, 0, "- Press (m) for menu (not yet implemented).");
-        mvwprintw(status_win, 2, 0, "- Press (q) to exit.");
-        mvwprintw(status_win, 3, 0, "You are at x=%d, y=%d, t=%d.", x, y, t);
+        //mvwprintw(status_win, 1, 0, "- Press (m) for menu (not yet implemented).");
+        mvwprintw(status_win, 1, 0, "- Press (q) to exit.");
+        mvwprintw(status_win, 2, 0, "You are at x=%d, y=%d, t=%d.", x, y, t);
         update_panels();
         doupdate();
 
@@ -108,6 +113,35 @@ int main()
             if (y < game_y_max)
                 y++;
         }
+
+        wclear(status_win);
+        dice = roll(20);
+        mvwprintw(status_win, 1, 0, "You rolled %d.", dice);
+        update_panels();
+        doupdate();
+        sleep(1);
+        if (dice > 15) {
+            enemyStruct *enemy = init_enemy("enemy", 10, 10, 10);
+            combatantStruct *combatants = init_combat(player, enemy);
+            mvwprintw(status_win, 2, 0, "You are in combat with %s.", enemy->name);
+            update_panels();
+            doupdate();
+            sleep(1);
+            alive = combat(combatants);
+            if (alive > 0) {
+                mvwprintw(status_win, 3, 0, "You won against the %s.", enemy->name);
+                update_panels();
+                doupdate();
+            }
+            else {
+                mvwprintw(status_win, 3, 0, "You lost to the %s.", enemy->name);
+                update_panels();
+                doupdate();
+                sleep(1);
+                break;
+            }
+        }
+        
 
         t++;
     }
