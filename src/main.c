@@ -4,12 +4,13 @@
 #include <unistd.h>
 #include <curses.h>
 #include <panel.h>
-//#include <menu.h>
+#include <menu.h>
 #include "utils.h"
 #include "player.h"
 #include "enemy.h"
 #include "combat.h"
 #include "screen.h"
+#include "menu.h"
 //#include "map.h"
 
 int main()
@@ -38,6 +39,9 @@ int main()
     int window_x = x_max / 2 - window_width / 2;
     int window_y = y_max / 2 - window_height / 2;
 
+
+    // Draw menu window
+    screenStruct *menu_screen = init_menu_screen(max_height, max_width, window_y, window_x);
 
     // Draw game window
     screenStruct *game_screen = init_game_screen(max_height, max_width, window_y, window_x);
@@ -75,9 +79,9 @@ int main()
         wclear(status_screen->win);
         mvwprintw(game_screen->win, y, x, "$");
         mvwprintw(status_screen->win, 0, 0, "- You are ($).");
-        //mvwprintw(status_screen->win, 1, 0, "- Press (m) for menu (not yet implemented).");
-        mvwprintw(status_screen->win, 1, 0, "- Press (q) to exit.");
-        mvwprintw(status_screen->win, 2, 0, "You are at x=%d, y=%d, t=%d.", x, y, t);
+        mvwprintw(status_screen->win, 1, 0, "- Press (m) for menu.");
+        mvwprintw(status_screen->win, 2, 0, "- Press (q) to exit.");
+        mvwprintw(status_screen->win, 3, 0, "You are at x=%d, y=%d, t=%d.", x, y, t);
         update_panels();
         doupdate();
 
@@ -100,6 +104,12 @@ int main()
         else if ((ch == KEY_DOWN) || (ch == 's')) {
             if (y < game_y_max)
                 y++;
+        }
+        else if (ch == 'm') {
+            top_panel(menu_screen->pan);
+        }
+        else if (ch == 'g') {
+            top_panel(game_screen->pan);
         }
 
         wclear(status_screen->win);

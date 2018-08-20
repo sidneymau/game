@@ -1,7 +1,6 @@
 #ifndef SCREEN_H
 #define SCREEN_H
 
-
 typedef struct {
     WINDOW *win;
     WINDOW *box;
