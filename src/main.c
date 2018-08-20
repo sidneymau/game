@@ -73,7 +73,7 @@ int main()
         wclear(status_screen->win);
         mvwprintw(game_screen->win, y, x, "$");
         mvwprintw(status_screen->win, 0, 0, "You ($) are at x=%d, y=%d, t=%d.", x, y, t);
-        mvwprintw(status_screen->win, 1, 0, "- Press (m) for menu (not implemented).");
+        mvwprintw(status_screen->win, 1, 0, "- Press (m) for menu.");
         mvwprintw(status_screen->win, 2, 0, "- Press (q) to exit.");
         mvwprintw(status_screen->win, 0, game_x_max / 2, "name: %s", player->name);
         mvwprintw(status_screen->win, 1, game_x_max / 2, "vitality: %d", player->vitality);
@@ -86,15 +86,18 @@ int main()
         if (ch == 'q') {
             break;
         }
-        /*
         if (ch == 'm') {
             top_panel(menu_screen->pan);
+            wnoutrefresh(menu_screen->box);
+            wnoutrefresh(menu_screen->win);
+            update_panels();
             doupdate();
-            getch();
+            sleep(3);
             top_panel(game_screen->pan);
+            wnoutrefresh(game_screen->box);
+            wnoutrefresh(game_screen->win);
             doupdate();
         }
-        */
 
         if ((ch == KEY_RIGHT) || (ch == 'd')) {
             if (x < game_x_max)
