@@ -118,7 +118,7 @@ int main()
             enemyStruct *enemy = init_enemy("enemy", 10, 10, 10);
             combatantStruct *combatants = init_combat(player, enemy);
             wclear(status_screen->win);
-            mvwprintw(status_screen->win, 0, 0, "You an ecountered a(n) %s!", enemy->name);
+            mvwprintw(status_screen->win, 0, 0, "You ecountered %s!", enemy->name);
             update_panels();
             doupdate();
             sleep(1);
@@ -128,13 +128,13 @@ int main()
             sleep(1);
             alive = combat(combatants);
             if (alive == 1) {
-                mvwprintw(status_screen->win, 2, 0, "You won against the %s.", enemy->name);
+                mvwprintw(status_screen->win, 2, 0, "You won against %s.", enemy->name);
                 update_panels();
                 doupdate();
                 sleep(1);
             }
             else {
-                mvwprintw(status_screen->win, 2, 0, "You lost to the %s.", enemy->name);
+                mvwprintw(status_screen->win, 2, 0, "You lost to %s.", enemy->name);
                 update_panels();
                 doupdate();
                 sleep(1);
