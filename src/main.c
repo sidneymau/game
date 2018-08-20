@@ -41,7 +41,7 @@ int main()
 
 
     // Draw menu window
-    screenStruct *menu_screen = init_menu_screen(max_height, max_width, window_y, window_x);
+    screenStruct *menu_screen = init_menu_screen(max_height / 2, max_width / 2, window_y, window_x);
 
     // Draw game window
     screenStruct *game_screen = init_game_screen(max_height, max_width, window_y, window_x);
@@ -79,9 +79,12 @@ int main()
         wclear(status_screen->win);
         mvwprintw(game_screen->win, y, x, "$");
         mvwprintw(status_screen->win, 0, 0, "- You are ($).");
-        mvwprintw(status_screen->win, 1, 0, "- Press (m) for menu.");
+        mvwprintw(status_screen->win, 1, 0, "- Press (m) for menu (not implemented).");
         mvwprintw(status_screen->win, 2, 0, "- Press (q) to exit.");
         mvwprintw(status_screen->win, 3, 0, "You are at x=%d, y=%d, t=%d.", x, y, t);
+        mvwprintw(status_screen->win, 0, game_x_max / 2, "vitality: %d", player->vitality);
+        mvwprintw(status_screen->win, 1, game_x_max / 2, "power: %d", player->power);
+        mvwprintw(status_screen->win, 2, game_x_max / 2, "mana: %d", player->mana);
         update_panels();
         doupdate();
 
@@ -89,7 +92,17 @@ int main()
         if (ch == 'q') {
             break;
         }
-        else if ((ch == KEY_RIGHT) || (ch == 'd')) {
+        /*
+        if (ch == 'm') {
+            top_panel(menu_screen->pan);
+            doupdate();
+            getch();
+            top_panel(game_screen->pan);
+            doupdate();
+        }
+        */
+
+        if ((ch == KEY_RIGHT) || (ch == 'd')) {
             if (x < game_x_max)
                 x++;
         }
@@ -104,12 +117,6 @@ int main()
         else if ((ch == KEY_DOWN) || (ch == 's')) {
             if (y < game_y_max)
                 y++;
-        }
-        else if (ch == 'm') {
-            top_panel(menu_screen->pan);
-        }
-        else if (ch == 'g') {
-            top_panel(game_screen->pan);
         }
 
         wclear(status_screen->win);
