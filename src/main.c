@@ -29,52 +29,47 @@ int main()
     box(stdscr, 0, 0);
     mvprintw(0, 0, "Screen");
 
-    // set up initial windows
-    //int x_min = 0, y_min = 0;
-    int x_max, y_max;
+    int x_max = 0;
+    int y_max = 0;
     getmaxyx(stdscr, y_max, x_max);
-
+    
     int max_width = x_max - 4;
     int max_height = y_max - 4;
     int window_width = max_width + 2;
-	int window_height = max_height + 2;
-	int window_x = x_max / 2 - window_width / 2;
+    int window_height = max_height + 2;
+    int window_x = x_max / 2 - window_width / 2;
     int window_y = y_max / 2 - window_height / 2;
 
+
     // Draw game window
-    WINDOW *game_border = newwin(max_height - 4, max_width, window_y, window_x + 1);
-    box(game_border, 0, 0);
-    WINDOW *game_win = newwin(max_height - 6, max_width - 4, window_y + 1, window_x + 3);
-    PANEL *game_panel = new_panel(game_win);
+    screenStruct *game_screen = init_game_screen(max_height, max_width, window_y, window_x);
+
+    // Draw status window
+    screenStruct *status_screen = init_status_screen(max_height, max_width, window_y, window_x);
+
+    // Game messages
+    mvwprintw(game_screen->box, 0, 0, "Game");
+
+    // Status messages
+    mvwprintw(status_screen->box, 0, 0, "Status");
+    mvwprintw(status_screen->win, 0, 0, "- You are ($).");
+    mvwprintw(status_screen->win, 1, 0, "- Press (m) for menu (not yet implemented).");
+    mvwprintw(status_screen->win, 2, 0, "- Press (q) to exit.");
+
+    // Update
+    wnoutrefresh(stdscr);
+    wnoutrefresh(game_screen->box);
+    wnoutrefresh(status_screen->box);
+    update_panels();
+    doupdate();
+
     int game_x_min = 0, game_y_min = 0;
     int game_x_max, game_y_max;
-    getmaxyx(game_win, game_y_max, game_x_max);
+    getmaxyx(game_screen->win, game_y_max, game_x_max);
     game_x_min+=0;
     game_y_min+=0;
     game_x_max-=1;
     game_y_max-=1;
-
-    // Draw status window
-    WINDOW *status_border = newwin(6, max_width, window_y + max_height - 4, window_x + 1);
-    box(status_border, 0, 0);
-    WINDOW *status_win = newwin(4, max_width - 3, window_y + max_height - 3, window_x + 3);
-    PANEL *status_panel = new_panel(status_win);
-
-    // Game messages
-    mvwprintw(game_border, 0, 0, "Game");
-
-    // Status messages
-    mvwprintw(status_border, 0, 0, "Status");
-    mvwprintw(status_win, 0, 0, "- You are ($).");
-    mvwprintw(status_win, 1, 0, "- Press (m) for menu (not yet implemented).");
-    mvwprintw(status_win, 2, 0, "- Press (q) to exit.");
-
-    // Update
-    wnoutrefresh(stdscr);
-    wnoutrefresh(game_border);
-    wnoutrefresh(status_border);
-    update_panels();
-    doupdate();
 
     int x = game_x_min, y = game_y_min;
     int ch = 0;
@@ -82,13 +77,13 @@ int main()
     int dice = 0;
     int alive = 1;
     while(1) {
-        wclear(game_win);
-        wclear(status_win);
-        mvwprintw(game_win, y, x, "$");
-        mvwprintw(status_win, 0, 0, "- You are ($).");
-        //mvwprintw(status_win, 1, 0, "- Press (m) for menu (not yet implemented).");
-        mvwprintw(status_win, 1, 0, "- Press (q) to exit.");
-        mvwprintw(status_win, 2, 0, "You are at x=%d, y=%d, t=%d.", x, y, t);
+        wclear(game_screen->win);
+        wclear(status_screen->win);
+        mvwprintw(game_screen->win, y, x, "$");
+        mvwprintw(status_screen->win, 0, 0, "- You are ($).");
+        //mvwprintw(status_screen->win, 1, 0, "- Press (m) for menu (not yet implemented).");
+        mvwprintw(status_screen->win, 1, 0, "- Press (q) to exit.");
+        mvwprintw(status_screen->win, 2, 0, "You are at x=%d, y=%d, t=%d.", x, y, t);
         update_panels();
         doupdate();
 
@@ -113,49 +108,50 @@ int main()
                 y++;
         }
 
-        wclear(status_win);
+        wclear(status_screen->win);
         dice = roll(20);
-        mvwprintw(status_win, 1, 0, "You rolled %d.", dice);
+        mvwprintw(status_screen->win, 1, 0, "You rolled %d.", dice);
         update_panels();
         doupdate();
         sleep(1);
         if (dice > 15) {
             enemyStruct *enemy = init_enemy("enemy", 10, 10, 10);
             combatantStruct *combatants = init_combat(player, enemy);
-            mvwprintw(status_win, 2, 0, "You are in combat with %s.", enemy->name);
+            mvwprintw(status_screen->win, 2, 0, "You are in combat with %s.", enemy->name);
             update_panels();
             doupdate();
             sleep(1);
             alive = combat(combatants);
             if (alive == 1) {
-                mvwprintw(status_win, 3, 0, "You won against the %s.", enemy->name);
+                mvwprintw(status_screen->win, 3, 0, "You won against the %s.", enemy->name);
                 update_panels();
                 doupdate();
                 sleep(1);
             }
             else {
-                mvwprintw(status_win, 3, 0, "You lost to the %s.", enemy->name);
+                mvwprintw(status_screen->win, 3, 0, "You lost to the %s.", enemy->name);
                 update_panels();
                 doupdate();
                 sleep(1);
                 break;
             }
+            free(enemy);
         }
-        
 
         t++;
     }
 
-    del_panel(game_panel);
-    delwin(game_win);
-    del_panel(status_panel);
-    delwin(status_win);
-    delwin(game_border);
-    delwin(status_border);
+    del_panel(game_screen->pan);
+    delwin(game_screen->win);
+    del_panel(status_screen->pan);
+    delwin(status_screen->win);
+    delwin(game_screen->box);
+    delwin(status_screen->box);
     clear();
-    //mvprintw(0, 0, "Press any key to quit.\n");
-    //getch();
     endwin(); // end ncurses
+    free(game_screen);
+    free(status_screen);
+    free(player);
 
     printf("Exiting game.\n");
 
