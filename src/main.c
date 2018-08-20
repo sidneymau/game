@@ -23,7 +23,6 @@ int main()
     fgets(name, 16, stdin);
 
     playerStruct *player = init_player(name, 100, 100, 100);
-    player_stats(player);
 
     // initialize ncurses screen
     init_screen();
@@ -49,11 +48,6 @@ int main()
     // Draw status window
     screenStruct *status_screen = init_status_screen(max_height, max_width, window_y, window_x);
 
-    // Status messages
-    mvwprintw(status_screen->win, 0, 0, "- You are ($).");
-    mvwprintw(status_screen->win, 1, 0, "- Press (m) for menu (not yet implemented).");
-    mvwprintw(status_screen->win, 2, 0, "- Press (q) to exit.");
-
     // Update
     wnoutrefresh(stdscr);
     wnoutrefresh(game_screen->box);
@@ -78,13 +72,13 @@ int main()
         wclear(game_screen->win);
         wclear(status_screen->win);
         mvwprintw(game_screen->win, y, x, "$");
-        mvwprintw(status_screen->win, 0, 0, "- You are ($).");
+        mvwprintw(status_screen->win, 0, 0, "You ($) are at x=%d, y=%d, t=%d.", x, y, t);
         mvwprintw(status_screen->win, 1, 0, "- Press (m) for menu (not implemented).");
         mvwprintw(status_screen->win, 2, 0, "- Press (q) to exit.");
-        mvwprintw(status_screen->win, 3, 0, "You are at x=%d, y=%d, t=%d.", x, y, t);
-        mvwprintw(status_screen->win, 0, game_x_max / 2, "vitality: %d", player->vitality);
-        mvwprintw(status_screen->win, 1, game_x_max / 2, "power: %d", player->power);
-        mvwprintw(status_screen->win, 2, game_x_max / 2, "mana: %d", player->mana);
+        mvwprintw(status_screen->win, 0, game_x_max / 2, "name: %s", player->name);
+        mvwprintw(status_screen->win, 1, game_x_max / 2, "vitality: %d", player->vitality);
+        mvwprintw(status_screen->win, 2, game_x_max / 2, "power: %d", player->power);
+        mvwprintw(status_screen->win, 3, game_x_max / 2, "mana: %d", player->mana);
         update_panels();
         doupdate();
 
@@ -119,33 +113,28 @@ int main()
                 y++;
         }
 
-        wclear(status_screen->win);
-        mvwprintw(status_screen->win, 0, 0, "Press any button to roll for encounter.");
-        update_panels();
-        doupdate();
-        getch();
         dice = roll(20);
-        wclear(status_screen->win);
-        mvwprintw(status_screen->win, 0, 0, "You rolled %d.", dice);
-        update_panels();
-        doupdate();
-        sleep(1);
         if (dice > 15) {
             enemyStruct *enemy = init_enemy("enemy", 10, 10, 10);
             combatantStruct *combatants = init_combat(player, enemy);
-            mvwprintw(status_screen->win, 2, 0, "You are in combat with %s.", enemy->name);
+            wclear(status_screen->win);
+            mvwprintw(status_screen->win, 0, 0, "You an ecountered a(n) %s!", enemy->name);
+            update_panels();
+            doupdate();
+            sleep(1);
+            mvwprintw(status_screen->win, 1, 0, "You are in combat with %s.", enemy->name);
             update_panels();
             doupdate();
             sleep(1);
             alive = combat(combatants);
             if (alive == 1) {
-                mvwprintw(status_screen->win, 3, 0, "You won against the %s.", enemy->name);
+                mvwprintw(status_screen->win, 2, 0, "You won against the %s.", enemy->name);
                 update_panels();
                 doupdate();
                 sleep(1);
             }
             else {
-                mvwprintw(status_screen->win, 3, 0, "You lost to the %s.", enemy->name);
+                mvwprintw(status_screen->win, 2, 0, "You lost to the %s.", enemy->name);
                 update_panels();
                 doupdate();
                 sleep(1);
