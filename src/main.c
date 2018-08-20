@@ -26,7 +26,7 @@ int main()
 
     // initialize ncurses screen
     init_screen();
-    draw_borders(stdscr);
+    box(stdscr, 0, 0);
     mvprintw(0, 0, "Screen");
 
     // set up initial windows
@@ -42,9 +42,9 @@ int main()
     int window_y = y_max / 2 - window_height / 2;
 
     // Draw game window
-    WINDOW *game_border = create_newwin(max_height - 4, max_width, window_y, window_x + 1);
-    draw_borders(game_border);
-    WINDOW *game_win = create_newwin(max_height - 6, max_width - 4, window_y + 1, window_x + 3);
+    WINDOW *game_border = newwin(max_height - 4, max_width, window_y, window_x + 1);
+    box(game_border, 0, 0);
+    WINDOW *game_win = newwin(max_height - 6, max_width - 4, window_y + 1, window_x + 3);
     PANEL *game_panel = new_panel(game_win);
     int game_x_min = 0, game_y_min = 0;
     int game_x_max, game_y_max;
@@ -55,9 +55,9 @@ int main()
     game_y_max-=1;
 
     // Draw status window
-    WINDOW *status_border = create_newwin(6, max_width, window_y + max_height - 4, window_x + 1);
-    draw_borders(status_border);
-    WINDOW *status_win = create_newwin(4, max_width - 3, window_y + max_height - 3, window_x + 3);
+    WINDOW *status_border = newwin(6, max_width, window_y + max_height - 4, window_x + 1);
+    box(status_border, 0, 0);
+    WINDOW *status_win = newwin(4, max_width - 3, window_y + max_height - 3, window_x + 3);
     PANEL *status_panel = new_panel(status_win);
 
     // Game messages
@@ -70,6 +70,7 @@ int main()
     mvwprintw(status_win, 2, 0, "- Press (q) to exit.");
 
     // Update
+    wnoutrefresh(stdscr);
     wnoutrefresh(game_border);
     wnoutrefresh(status_border);
     update_panels();
