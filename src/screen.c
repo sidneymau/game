@@ -15,6 +15,9 @@ void init_screen()
     raw();
     noecho();
     curs_set(FALSE);
+
+    box(stdscr, 0, 0);
+    mvprintw(0, 0, "Screen");
 }
 
 screenStruct *init_game_screen(int max_height, int max_width, int window_y, int window_x)
@@ -30,6 +33,7 @@ screenStruct *init_game_screen(int max_height, int max_width, int window_y, int 
     game_screen->win = game_win;
     game_screen->box = game_border;
     game_screen->pan = game_panel;
+    mvwprintw(game_screen->box, 0, 0, "Game");
 
     return game_screen;
 
@@ -48,6 +52,7 @@ screenStruct *init_status_screen(int max_height, int max_width, int window_y, in
     status_screen->win = status_win;
     status_screen->box = status_border;
     status_screen->pan = status_panel;
+    mvwprintw(status_screen->box, 0, 0, "Status");
 
     return status_screen;
 }

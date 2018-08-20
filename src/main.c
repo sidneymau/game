@@ -26,8 +26,6 @@ int main()
 
     // initialize ncurses screen
     init_screen();
-    box(stdscr, 0, 0);
-    mvprintw(0, 0, "Screen");
 
     int x_max = 0;
     int y_max = 0;
@@ -47,11 +45,7 @@ int main()
     // Draw status window
     screenStruct *status_screen = init_status_screen(max_height, max_width, window_y, window_x);
 
-    // Game messages
-    mvwprintw(game_screen->box, 0, 0, "Game");
-
     // Status messages
-    mvwprintw(status_screen->box, 0, 0, "Status");
     mvwprintw(status_screen->win, 0, 0, "- You are ($).");
     mvwprintw(status_screen->win, 1, 0, "- Press (m) for menu (not yet implemented).");
     mvwprintw(status_screen->win, 2, 0, "- Press (q) to exit.");
@@ -109,8 +103,13 @@ int main()
         }
 
         wclear(status_screen->win);
+        mvwprintw(status_screen->win, 0, 0, "Press any button to roll for encounter.");
+        update_panels();
+        doupdate();
+        getch();
         dice = roll(20);
-        mvwprintw(status_screen->win, 1, 0, "You rolled %d.", dice);
+        wclear(status_screen->win);
+        mvwprintw(status_screen->win, 0, 0, "You rolled %d.", dice);
         update_panels();
         doupdate();
         sleep(1);
