@@ -40,7 +40,7 @@ int main()
 
 
     // Draw menu window
-    screenStruct *menu_screen = init_menu_screen(max_height / 2, max_width / 2, window_y, window_x);
+    screenStruct *menu_screen = init_menu_screen(max_height / 2, max_width / 2, window_y + 2, window_x + 2);
 
     // Draw game window
     screenStruct *game_screen = init_game_screen(max_height, max_width, window_y, window_x);
@@ -75,10 +75,6 @@ int main()
         mvwprintw(status_screen->win, 0, 0, "You ($) are at x=%d, y=%d, t=%d.", x, y, t);
         mvwprintw(status_screen->win, 1, 0, "- Press (m) for menu.");
         mvwprintw(status_screen->win, 2, 0, "- Press (q) to exit.");
-        mvwprintw(status_screen->win, 0, game_x_max / 2, "name: %s", player->name);
-        mvwprintw(status_screen->win, 1, game_x_max / 2, "vitality: %d", player->vitality);
-        mvwprintw(status_screen->win, 2, game_x_max / 2, "power: %d", player->power);
-        mvwprintw(status_screen->win, 3, game_x_max / 2, "mana: %d", player->mana);
         update_panels();
         doupdate();
 
@@ -88,6 +84,10 @@ int main()
         }
         if (ch == 'm') {
             top_panel(menu_screen->pan);
+            mvwprintw(menu_screen->win, 0, 0, "name: %s", player->name);
+            mvwprintw(menu_screen->win, 1, 0, "vitality: %d", player->vitality);
+            mvwprintw(menu_screen->win, 2, 0, "power: %d", player->power);
+            mvwprintw(menu_screen->win, 3, 0, "mana: %d", player->mana);
             wnoutrefresh(menu_screen->box);
             wnoutrefresh(menu_screen->win);
             update_panels();

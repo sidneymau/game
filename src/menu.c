@@ -23,7 +23,5 @@ screenStruct *init_menu_screen(int max_height, int max_width, int window_y, int 
     menu_screen->pan = menu_panel;
     mvwprintw(menu_screen->box, 0, 0, "Menu");
 
-    mvwprintw(menu_screen->win, 1, 0, "This is a menu.");
-
     return menu_screen;
 }
